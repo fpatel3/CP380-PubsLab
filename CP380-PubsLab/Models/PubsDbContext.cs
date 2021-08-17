@@ -13,17 +13,10 @@ namespace CP380_PubsLab.Models
             optionsBuilder.UseSqlServer($"Server=(localdb)\\mssqllocaldb;Integrated Security=true;AttachDbFilename={dbpath}");
         }
 
-        // TODO: Add DbSets
+        
 
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Jobs> Jobs { get; set; }
-        public DbSet<Sales> Sales { get; set; }
-        public DbSet<Titles> Titles { get; set; }
-        public DbSet<Stores> Stores { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+          protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // TODO
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Jobs>().ToTable("jobs");
@@ -31,9 +24,10 @@ namespace CP380_PubsLab.Models
             modelBuilder.Entity<Employee>(entity =>
             {
                 entity.ToTable("employee");
-                entity.HasOne<Jobs>(a => a.Jobs)
-               .WithMany(a => a.Employee)
-               .HasForeignKey(a => a.job_id);
+
+                entity.HasOne<Jobs>(s => s.Jobs)
+               .WithMany(s => s.Employee)
+               .HasForeignKey(s => s.job_id);
             });
 
             modelBuilder.Entity<Titles>(entity =>
@@ -48,19 +42,23 @@ namespace CP380_PubsLab.Models
             modelBuilder.Entity<Sales>(entity =>
             {
                 entity.ToTable("sales")
-                .HasKey(sales => new
+                .HasKey(sal => new
                 {
-                    sales.stor_id,
-                    sales.title_id
+                    sal.stor_id,
+                    sal.title_id
                 });
             });
-        }
-    }
 
+            // TODO: Add DbSets
+
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Jobs> Jobs { get; set; }
+        public DbSet<Sales> Sales { get; set; }
+        public DbSet<Titles> Titles { get; set; }
+        public DbSet<Stores> Stores { get; set; }
 
     public class Titles
-    {
-        // TODO
+    {        
         [Key]
         public string title_id { get; set; }
         public string title { get; set; }
@@ -70,7 +68,6 @@ namespace CP380_PubsLab.Models
 
     public class Stores
     {
-        // TODO
         [Key]
         public char stor_id { get; set; }
         public string stor_name { get; set; }
@@ -80,7 +77,6 @@ namespace CP380_PubsLab.Models
 
     public class Sales
     {
-        // TODO
         [Key]
         public string ord_num { get; set; }
         public char stor_id { get; set; }
@@ -91,8 +87,7 @@ namespace CP380_PubsLab.Models
 
     public class Employee
     {
-        // TODO
-         [Key]
+        [Key]
         public string emp_id { get; set; }
         public string fname { get; set; }
         public string lname { get; set; }
@@ -102,10 +97,10 @@ namespace CP380_PubsLab.Models
 
     public class Jobs
     {
-        // TODO
         [Key]
         public Int16 job_id { get; set; }
         public string job_desc { get; set; }
         public virtual ICollection<Employee> Employee { get; set; }
+
     }
 }
